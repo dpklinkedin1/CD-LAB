@@ -61,3 +61,94 @@ int main() {
     return 0;
 }
 #-----------------SYMBOL TABLE------------------------------------------------------
+#include <stdio.h>
+#include <string.h>
+
+struct symbol {
+    char name[20];
+    char type[20];
+    int address;
+};
+
+int main() {
+    struct symbol s[10];
+    int n = 0, choice, i;
+    char search[20];
+
+    while (1) {
+        printf("\n--- Symbol Table ---\n");
+        printf("1. Insert\n");
+        printf("2. Display\n");
+        printf("3. Search\n");
+        printf("4. Exit\n");
+
+        printf("Enter choice: ");
+        scanf("%d", &choice);
+
+        switch (choice) {
+
+            case 1:
+                if (n >= 10) {
+                    printf("Symbol Table is full!\n");
+                    break;
+                }
+
+                printf("Enter name: ");
+                scanf("%19s", s[n].name);
+
+                printf("Enter type: ");
+                scanf("%19s", s[n].type);
+
+                printf("Enter address: ");
+                scanf("%d", &s[n].address);
+
+                n++;
+                printf("Symbol inserted successfully.\n");
+                break;
+
+            case 2:
+                if (n == 0) {
+                    printf("Symbol Table is empty.\n");
+                } else {
+                    printf("\nName\tType\tAddress\n");
+
+                    for (i = 0; i < n; i++) {
+                        printf("%s\t%s\t%d\n",
+                               s[i].name,
+                               s[i].type,
+                               s[i].address);
+                    }
+                }
+                break;
+
+            case 3:
+                printf("Enter name to search: ");
+                scanf("%19s", search);
+
+                for (i = 0; i < n; i++) {
+                    if (strcmp(search, s[i].name) == 0) {
+                        printf("Found: %s\t%s\t%d\n",
+                               s[i].name,
+                               s[i].type,
+                               s[i].address);
+                        break;
+                    }
+                }
+
+                if (i == n) {
+                    printf("Symbol not found.\n");
+                }
+                break;
+
+            case 4:
+                printf("Exiting...\n");
+                return 0;
+
+            default:
+                printf("Enter a valid choice.\n");
+        }
+    }
+
+    return 0;
+}
+
