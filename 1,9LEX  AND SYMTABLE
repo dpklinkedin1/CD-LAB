@@ -1,0 +1,62 @@
+#-------------------------LEXICAL ANLYZER------------------------------------------------
+#include <stdio.h>
+#include <string.h>
+#include <ctype.h>
+
+int main() {
+    char s[100], word[20];
+    char keywords[][10] = {
+        "int", "float", "char", "if", "else", "while"
+    };
+    int i = 0, j, k, found;
+
+    printf("Enter a statement: ");
+    fgets(s, sizeof(s), stdin);
+
+    while (s[i] != '\0' && s[i] != '\n') {
+
+        if (isspace(s[i]))
+            i++;
+
+        else if (isalpha(s[i])) {
+            j = 0;
+
+            while (isalnum(s[i])) {
+                if (j < 19)
+                    word[j++] = s[i];
+                i++;
+            }
+
+            word[j] = '\0';
+            found = 0;
+
+            for (k = 0; k < 6; k++)
+                if (strcmp(word, keywords[k]) == 0)
+                    found = 1;
+
+            printf("%s -> %s\n", word,
+                   found ? "Keyword" : "Identifier");
+        }
+
+        else if (isdigit(s[i])) {
+            j = 0;
+
+            while (isdigit(s[i])) {
+                if (j < 19)
+                    word[j++] = s[i];
+                i++;
+            }
+
+            word[j] = '\0';
+            printf("%s -> Constant\n", word);
+        }
+
+        else if (strchr("+-*/%=<>!", s[i]))
+            printf("%c -> Operator\n", s[i++]);
+
+        else
+            printf("%c -> Special Symbol\n", s[i++]);
+    }
+
+    return 0;
+}
