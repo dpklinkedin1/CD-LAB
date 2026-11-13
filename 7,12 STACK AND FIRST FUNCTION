@@ -1,0 +1,129 @@
+
+#----------------STACK------------------------------
+
+#include <stdio.h>
+#include <stdlib.h>
+
+int main() {
+    int stack[5], top = -1;
+    int choice, value, i;
+
+    while (1) {
+        printf("\n1. Push\n2. Pop\n3. Display\n4. Exit\n");
+        printf("Enter choice: ");
+        scanf("%d", &choice);
+
+        switch (choice) {
+
+            case 1:
+                if (top == 4)
+                    printf("Stack Overflow\n");
+                else {
+                    printf("Enter value: ");
+                    scanf("%d", &value);
+                    stack[++top] = value;
+                    printf("Value pushed successfully\n");
+                }
+                break;
+
+            case 2:
+                if (top == -1)
+                    printf("Stack Underflow\n");
+                else {
+                    value = stack[top--];
+                    printf("Popped value: %d\n", value);
+                }
+                break;
+
+            case 3:
+                if (top == -1)
+                    printf("Stack is empty\n");
+                else {
+                    printf("Stack elements: ");
+                    for (i = top; i >= 0; i--)
+                        printf("%d ", stack[i]);
+                    printf("\n");
+                }
+                break;
+
+            case 4:
+                exit(0);
+
+            default:
+                printf("Enter a valid choice\n");
+        }
+    }
+
+    return 0;
+}
+
+
+#----------------------------FIRST FXN---------------
+
+#include <stdio.h>
+#include <string.h>
+#include <ctype.h>
+
+char p[6][10] = {
+    "E->E+T", "E->T",
+    "T->T*F", "T->F",
+    "F->(E)", "F->id"
+};
+
+char first[26][26];
+
+void add(int x, char c) {
+    int i;
+
+    for (i = 0; first[x][i]; i++)
+        if (first[x][i] == c)
+            return;
+
+    first[x][i] = c;
+    first[x][i+1] = '\0';
+}
+
+void findF(char c) {
+    int i, j;
+    char x;
+
+    for (i = 0; i < 6; i++) {
+        if (p[i][0] != c)
+            continue;
+
+        x = p[i][3];
+
+        if (!isupper((unsigned char)x))
+            add(c-'A', x);
+
+        else if (x != c) {
+            findF(x);
+
+            for (j = 0; first[x-'A'][j]; j++)
+                add(c-'A', first[x-'A'][j]);
+        }
+    }
+}
+
+int main() {
+    int i, j;
+    char nt[] = {'E', 'T', 'F'};
+
+    for (i = 0; i < 3; i++)
+        findF(nt[i]);
+
+    for (i = 0; i < 3; i++) {
+        printf("FIRST(%c) = { ", nt[i]);
+
+        for (j = 0; first[nt[i]-'A'][j]; j++) {
+            if (first[nt[i]-'A'][j] == 'i')
+                printf("id ");
+            else
+                printf("%c ", first[nt[i]-'A'][j]);
+        }
+
+        printf("}\n");
+    }
+
+    return 0;
+}
